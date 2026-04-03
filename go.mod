@@ -2,4 +2,6 @@ module github.com/bjanders/fpanels
 
 go 1.14
 
-require github.com/google/gousb v2.1.0+incompatible
+require github.com/google/gousb v1.1.3
+
+replace github.com/google/gousb => ../gousb

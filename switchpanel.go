@@ -78,7 +78,8 @@ func NewSwitchPanel() (*SwitchPanel, error) {
 		panel.Close()
 		return nil, err
 	}
-	panel.device.SetAutoDetach(true)
+	// SetAutoDetach is not supported on macOS and causes DefaultInterface() to fail.
+	// Skipping it entirely — not needed for HID devices like the switch panel.
 
 	panel.intf, panel.intfDone, err = panel.device.DefaultInterface()
 	if err != nil {
