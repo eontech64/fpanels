@@ -10,8 +10,23 @@ image:https://godoc.org/github.com/bjanders/fpanels?status.svg["GoDoc", link="ht
 --
 
 NOTE: This is work in progress. The code is useable, but not much tested. The API may
-still change. The library has been verified to work on Linux and Windows. On macOS 11.1 
-I get a "bad access" error code.
+still change. The library has been verified to work on Linux and Windows.
+
+=== macOS support
+
+This fork adds macOS compatibility for the Flight Switch Panel. The original library
+failed on macOS with a `bad access` error because `libusb` does not support kernel
+driver detachment on macOS (`LIBUSB_ERROR_NOT_SUPPORTED`). Calling `SetAutoDetach(true)`
+internally set the `autodetach` flag, which then caused `DefaultInterface()` to attempt
+`detachKernelDriver` and fail with `LIBUSB_ERROR_ACCESS`.
+
+The fix skips `SetAutoDetach` entirely — it is not needed for HID devices like the
+switch panel on macOS.
+
+NOTE: On macOS, `libusb` cannot claim HID interfaces that are owned by the system's
+IOHIDFamily driver. For macOS, consider using `hidapi` (IOKit backend) directly.
+See https://github.com/eontech64/ksp-switchpanel for a working macOS implementation
+using `go-hid`.
 
 This library provides code for interfacing with the following Logitech/Saitek
 devices:
