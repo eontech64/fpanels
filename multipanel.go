@@ -90,7 +90,8 @@ func NewMultiPanel() (*MultiPanel, error) {
 		panel.Close()
 		return nil, err
 	}
-	panel.device.SetAutoDetach(true)
+	// SetAutoDetach is not supported on macOS and causes DefaultInterface() to fail.
+	// Skipping it entirely — not needed for HID devices like the multi panel.
 
 	// Initialize switches
 	panel.intf, panel.intfDone, err = panel.device.DefaultInterface()
